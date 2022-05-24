@@ -3,17 +3,19 @@
 import Page from './page';
 
 class LoginPage extends Page {
-    
-    get inputEmail() {
-        return $('#username');
+    /**
+     * define selectors using getter methods
+     */
+    get inputUsername () {
+        return $('//*[@id="id_username"]');
     }
 
     get inputPassword () {
-        return $('#password');
+        return $('//*[@id="id_password"]');
     }
 
     get btnSubmit () {
-        return $('button[type="submit"]');
+        return $('/html/body/div/div/div/div/form/button');
     }
 
     /**
@@ -27,7 +29,7 @@ class LoginPage extends Page {
     }
 
     open () {
-        return super.open('login');
+        return super.open('login/');
     }
 }
 
