@@ -18,6 +18,10 @@ class LoginPage extends Page {
         return $('/html/body/div/div/div/div/form/button');
     }
 
+    get divErrorMessage(){
+        return $('.error-messages') //Css Locator
+    }
+
     /**
      * a method to encapsule automation code to interact with the page
      * e.g. to login using username and password
