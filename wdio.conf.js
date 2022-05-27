@@ -1,3 +1,6 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 exports.config = {
     //
     // ====================
@@ -70,7 +73,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'error',
     //
     // Set specific log levels per logger
     // loggers:
@@ -163,7 +166,7 @@ exports.config = {
      * @param {Object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
+    //onPrepare: function (config, capabilities) {
     // },
     /**
      * Gets executed before a worker process is spawned and can be used to initialise specific service

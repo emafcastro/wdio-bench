@@ -15,7 +15,7 @@ class LoginPage extends Page {
     }
 
     get btnSubmit () {
-        return $('/html/body/div/div/div/div/form/button');
+        return $('<button>');
     }
 
     get divErrorMessage(){

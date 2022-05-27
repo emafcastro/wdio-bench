@@ -1,15 +1,14 @@
 import LoginPage from "../pageobjects/login.page";
 import HomePage from "../pageobjects/home.page";
 
-describe("My Login application", () => {
+describe("Login - Valid interactions", () => {
     /**
      * Access to home and click on sign in button before each test
      */
     beforeEach(async () => {
         await HomePage.open();
-
-        await HomePage.SigninBtn.click();
-    });
+        await HomePage.signinBtn.click();
+    })
 
     afterEach(async () => {
         await browser.deleteAllCookies();
@@ -32,11 +31,20 @@ describe("My Login application", () => {
     /**
      * This test verifies the required attribute on the fields
      */
-    it("should check the fields email and password are required", async () => {
+     it("should check the fields email and password are required", async () => {
         await expect(await LoginPage.inputUsername).toHaveAttr("required");
         await expect(await LoginPage.inputPassword).toHaveAttr("required");
     });
 
+    
+});
+
+describe('Login - Interactions with validations', () => {
+    beforeEach(async () => {
+        await HomePage.open();
+
+        await HomePage.signinBtn.click();
+    });
     /**
      * This test verifies the error message when a field is empty
      */
@@ -58,4 +66,4 @@ describe("My Login application", () => {
             "* Please enter a correct Email Address and password. Note that both fields may be case-sensitive."
         );
     });
-});
+})
