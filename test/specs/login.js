@@ -7,9 +7,8 @@ describe("My Login application", () => {
      */
     beforeEach(async () => {
         await HomePage.open();
-
-        await HomePage.SigninBtn.click();
-    });
+        await HomePage.signinBtn.click();
+    })
 
     afterEach(async () => {
         await browser.deleteAllCookies();
