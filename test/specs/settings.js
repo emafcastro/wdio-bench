@@ -3,16 +3,20 @@ import SignupPage from  '../pageobjects/signup.page';
 import SettingsPage from  '../pageobjects/settings.page';
 import LoginPage from  '../pageobjects/login.page';
 
-
+beforeEach(async()=>{
+    await HomePage.open();
+    await HomePage.signinBtn.click();
+    await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
+    await HomePage.signOutLink.waitForDisplayed();
+    await HomePage.settingsLink.click();
+})
+afterEach(async () => {
+    await browser.deleteAllCookies();
+});
 describe('Open settings landing page', () => {
 
-    it('should open settings landing page', async () => {
+    fit('should open settings landing page', async () => {
 
-        await HomePage.open();
-        await HomePage.signinBtn.click();
-        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
-        await HomePage.signOutLink.waitForDisplayed();
-        await HomePage.settingsLink.click();
         await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/settings/");
 
     });
@@ -23,7 +27,7 @@ describe('Tests for URL of profile picture', () => {
 
     const randomURL = Math.random().toString(36).substring(7);
 
-    it('test with invalid URL', async () => {
+    fit('test with invalid URL', async () => {
         
         await SettingsPage.urlField.setValue(randomURL);
         await SettingsPage.updSettBtn.click();
@@ -31,14 +35,14 @@ describe('Tests for URL of profile picture', () => {
 
     });
 
-    it('test if field has attribute type=url', async () => {
+    fit('test if field has attribute type=url', async () => {
 
         const attr = await SettingsPage.urlField.getAttribute('type');
         await expect(attr).toBe('url');
 
     });
 
-    it('test with valid URL', async () => {
+    fit('test with valid URL', async () => {
 
         await SettingsPage.urlField.clearValue();
         await SettingsPage.urlField.setValue('https://realworld-djangoapp.herokuapp.com');

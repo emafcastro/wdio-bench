@@ -100,6 +100,10 @@ describe("New Article - Invalid interactions", () => {
         await HomePage.newArticleLink.click();
     });
 
+    afterEach(async () => {
+        await browser.deleteAllCookies();
+    });
+
     /**
      * A new article with empty title is created and the error message is validated
      */
@@ -115,5 +119,20 @@ describe("New Article - Invalid interactions", () => {
     it("should not autocomplete tags if there are not matching tags", async () => {
         await NewArticlePage.sendKeysToTagField("sarasa");
         expect(NewArticlePage.tagSuggestion).not.toBeExisting();
+    });
+
+    it("should allow it add only 120 characters in email field", async () => {
+        let chars = "abcdefghijklmnopqrstuvwxyz1234567890";
+        let text = "";
+        for (let ii = 0; ii < 120; ii++) {
+            text += chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        await NewArticlePage.titleField.setValue(text);
+        await expect(NewArticlePage.titleField).toHaveValue(text);
+
+        const newText = text + "extra";
+        await NewArticlePage.titleField.setValue(newText);
+        await expect(NewArticlePage.titleField).toHaveValue(text);
     });
 });
