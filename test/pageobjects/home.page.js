@@ -14,7 +14,11 @@ class HomePage extends Page {
     }
 
     get newArticleLink() {
-        return $(`//li/a[contains(text(),'New Article')]`)
+        return $(`//li/a[contains(text(),'New Article')]`);
+    }
+
+    get settingsLink() {
+        return $("/html/body/nav/div/ul/li[3]/a");
     }
 
     open() {

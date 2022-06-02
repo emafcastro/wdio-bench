@@ -8,7 +8,7 @@ class SignupPage extends Page {
     //get passwordField() { return $('//*[@id="id_password"]') }
     get signupBtn() { return $('/html/body/div/div/div/div/form/button') }
     get errorMessage() { return $('.error-messages') }
-    get errMessEmailinUse () { return $('/html/body/div/div/div/div/form/fieldset[2]/div/ul/li') }
+    get errMessEmailinUse() { return $('/html/body/div/div/div/div/form/fieldset[2]/div/ul/li') }
     
     async field(var1) {
         return $('//*[@id="'+var1+'"]')
