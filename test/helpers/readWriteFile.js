@@ -21,5 +21,4 @@ function readFile() {
         console.log("Error on reading file: " + error);
     }
 }
-readFile()
 module.exports = {writeFile, readFile}

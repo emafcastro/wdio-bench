@@ -32,22 +32,6 @@ class NewArticlePage extends Page {
         return $('[title="Click to add this tag"]');
     }
 
-    get titleText() {
-        return $("div.container > h1");
-    }
-
-    get authorLink() {
-        return $(".container > .article-meta > .info > a.author");
-    }
-
-    get contentSection() {
-        return $(".article-content");
-    }
-
-    get creationDateTxt(){
-        return $('.container > .article-meta > .info > span');
-    }
-
     open() {
         return super.open("new/");
     }
@@ -69,7 +53,7 @@ class NewArticlePage extends Page {
     }
 
     async sendKeysToTagField(text){
-        await (await this.tagsField).setValue("")
+        await this.tagsField.setValue("")
         await browser.keys(text)
     }
 }
