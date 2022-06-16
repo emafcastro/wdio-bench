@@ -2,20 +2,28 @@ import HomePage from  '../pageobjects/home.page';
 import SignupPage from  '../pageobjects/signup.page';
 import SettingsPage from  '../pageobjects/settings.page';
 import LoginPage from  '../pageobjects/login.page';
+const readWriteFile = require("../helpers/readWriteFile");
+
 
 beforeEach(async()=>{
+
+    let user = readWriteFile.readFile();
     await HomePage.open();
     await HomePage.signinBtn.click();
-    await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
+    await LoginPage.login(user.email, user.password);
     await HomePage.signOutLink.waitForDisplayed();
     await HomePage.settingsLink.click();
 })
+
 afterEach(async () => {
+
     await browser.deleteAllCookies();
+
 });
+
 describe('Open settings landing page', () => {
 
-    fit('should open settings landing page', async () => {
+    it('should open settings landing page', async () => {
 
         await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/settings/");
 
@@ -27,7 +35,7 @@ describe('Tests for URL of profile picture', () => {
 
     const randomURL = Math.random().toString(36).substring(7);
 
-    fit('test with invalid URL', async () => {
+    it('test with invalid URL', async () => {
         
         await SettingsPage.urlField.setValue(randomURL);
         await SettingsPage.updSettBtn.click();
@@ -35,20 +43,20 @@ describe('Tests for URL of profile picture', () => {
 
     });
 
-    fit('test if field has attribute type=url', async () => {
+    it('test if field has attribute type=url', async () => {
 
         const attr = await SettingsPage.urlField.getAttribute('type');
         await expect(attr).toBe('url');
 
     });
 
-    fit('test with valid URL', async () => {
+    it('test with valid URL', async () => {
 
         await SettingsPage.urlField.clearValue();
         await SettingsPage.urlField.setValue('https://realworld-djangoapp.herokuapp.com');
         await SettingsPage.updSettBtn.click();
-        //await expect(browser).toHaveUrlContaining("profile");
-        await expect(SettingsPage.profileImage).toHaveElementProperty('https://realworld-djangoapp.herokuapp.com');
+        await expect(browser).toHaveUrlContaining("profile");
+        //await expect(SettingsPage.profileImage).toHaveElementProperty('https://realworld-djangoapp.herokuapp.com');
         
     });
 });
@@ -72,14 +80,15 @@ describe('Tests for Your Name field', () => {
 
     const randomUsername = Math.random().toString(36).substring(7);
 
-    it('Test with changing your name field (happy path)', async () => {
+    fit('Test with changing your name field (happy path)', async () => {
 
         await HomePage.settingsLink.click();
         await SettingsPage.yourNameField.clearValue();
         await SettingsPage.yourNameField.setValue(randomUsername);
         await SettingsPage.updSettBtn.click();
         await expect(SettingsPage.userName).toHaveText(randomUsername);
-
+        readWriteFile.writeFile(randomUsername, "Valerio@tasja.com", "Fausto9865")
     });
+
 
 });

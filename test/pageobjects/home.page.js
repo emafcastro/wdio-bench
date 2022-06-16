@@ -10,7 +10,7 @@ class HomePage extends Page {
     }
 
     get signOutLink() {
-        return $(`//li/a[contains(text(),'Sign Out')]`);
+        return $('.nav-link=Sign Out');
     }
 
     get newArticleLink() {

@@ -14,7 +14,7 @@ function readFile() {
     
     try {
         const user = fs.readFileSync("users.json", {encoding:'utf8', flag:'r'});
-        jsonUser = JSON.parse(user)
+        let jsonUser = JSON.parse(user)
         return jsonUser
     }
     catch(error){
