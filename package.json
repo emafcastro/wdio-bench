@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "npx wdio run ./wdio.conf.js --spec login.js",
+        "test": "npx wdio run ./wdio.conf.js --spec settings.js",
         "wdio": "wdio run wdio.conf.js"
     },
     "keywords": [],

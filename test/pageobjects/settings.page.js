@@ -6,8 +6,10 @@ class SettingsPage extends Page {
     get updSettBtn() { return $('/html/body/div/div/div/div/form/fieldset/button')}
     get yourNameField() { return $('//*[@id="id_name"]')}
     get errorMessage() { return $('/html/body/div/div/div/div/form/form/ul')}
-    get userName() { return $('/html/body/div/div[1]/div/div/div/h4')}
-    get profileImage() { return $('/html/body/div/div[1]/div/div/div/img')}
+    get bioField() { return $('#id_bio')}
+    get emailField() { return $('#id_email')}
+    get errorMessage() { return $('.error-messages')}
+    get passwordField() { return $('#id_password')}
 
     open () {
         return super.open('settings');

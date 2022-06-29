@@ -1,168 +1,175 @@
 import HomePage from  '../pageobjects/home.page';
 import SignupPage from  '../pageobjects/signup.page';
 
-describe('Open sign up landing page', () => {
+describe("Sign up tests", ()=>{
 
-    it('should open sign up landing page', async () => {
+    describe('Open sign up landing page', () => {
 
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-        await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/register/");
+        it('should open sign up landing page', async () => {
 
-    });
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+            await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/register/");
 
-});
-
-describe('Test functionality of Have an account link', () => {
-
-    it('should open login page', async () => {
-
-        const accountLink = await $('/html/body/div/div/div/div/p/a');
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-        await accountLink.click();
-        await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/login/");
+         });
 
     });
 
-});
+    describe('Test functionality of Have an account link', () => {
 
-describe('Tests for Your Name field', () => {
+        it('should open login page', async () => {
 
-    const randomName = Math.random().toString(36).substring(7);
-    const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
-    const randomPassword = Math.random().toString(36).substring(7);
+            const accountLink = await $('/html/body/div/div/div/div/p/a');
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+            await accountLink.click();
+            await expect(browser).toHaveUrl("https://realworld-djangoapp.herokuapp.com/login/");
 
-    beforeEach(async () => {
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-    })
+        });
 
-    it('test with blank Name field', async () => {
+    });
 
-        //await expect(SignupPage.yourNameField).toHaveAttribute('required');
-        await expect(SignupPage.field("id_name")).toHaveAttribute('required');
+    describe('Tests for Your Name field', () => {
+
+        const randomName = Math.random().toString(36).substring(7);
+        const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
+        const randomPassword = Math.random().toString(36).substring(7);
+
+        beforeEach(async () => {
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+        })
+
+        it('test with blank Name field', async () => {
+
+            //await expect(SignupPage.yourNameField).toHaveAttribute('required');
+            await expect(SignupPage.field("id_name")).toHaveAttribute('required');
+            
+        });
         
+
+        it('test with only spaces in Name field', async () => {
+
+            await SignupPage.signup('           ', randomEmail, randomPassword);
+            await SignupPage.signupBtn.click();
+            await expect(SignupPage.errorMessage).toHaveText('* This field is required.');
+            
+        });
+
     });
-    
 
-    it('test with only spaces in Name field', async () => {
+    describe('Tests for Email field', () => {
 
-        await SignupPage.signup('           ', randomEmail, randomPassword);
-        await SignupPage.signupBtn.click();
-        await expect(SignupPage.errorMessage).toHaveText('* This field is required.');
+        const randomName = Math.random().toString(36).substring(7);
+        const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
+        const randomEmail2 = Math.random().toString(36).substring(7) + '@test.com';
+        const randomPassword = Math.random().toString(36).substring(7);
+        const email = randomEmail;
+        const email2 = randomEmail2;
         
-    });
+        beforeEach(async () => {
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+        })
 
-});
+        afterEach(async () => {
+            await browser.deleteAllCookies();
+        })
 
-describe('Tests for Email field', () => {
+        it('test with blank Email field', async () => {
 
-    const randomName = Math.random().toString(36).substring(7);
-    const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
-    const randomPassword = Math.random().toString(36).substring(7);
-    const email = randomEmail;
-    
-    beforeEach(async () => {
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-    })
+            //await expect(SignupPage.emailField).toHaveAttribute('required');
+            await expect(SignupPage.field("id_email")).toHaveAttribute('required');
+            
+        });
 
-    afterEach(async () => {
-        await browser.deleteAllCookies();
-    })
+        it('test with only spaces in Email field', async () => {
 
-    it('test with blank Email field', async () => {
+            //await expect(SignupPage.emailField).toHaveAttribute('required');
+            await expect(SignupPage.field("id_email")).toHaveAttribute('required');
+            
+        });
 
-        //await expect(SignupPage.emailField).toHaveAttribute('required');
-        await expect(SignupPage.field("id_email")).toHaveAttribute('required');
-        
-    });
+        it('Test with attribute type=email', async () => {
 
-    it('test with only spaces in Email field', async () => {
+            const emailField = await SignupPage.field("id_email");
+            const attr = await emailField.getAttribute('type');
+            await expect(attr).toBe('email');
 
-        //await expect(SignupPage.emailField).toHaveAttribute('required');
-        await expect(SignupPage.field("id_email")).toHaveAttribute('required');
-        
-    });
+        });
 
-    it('Test with attribute type=email', async () => {
+        it('Test with invalid email field', async () => {
 
-        const emailField = await SignupPage.field("id_email");
-        const attr = await emailField.getAttribute('type');
-        await expect(attr).toBe('email');
+            await SignupPage.signup(randomName, 'test@test', randomPassword);
+            await expect(SignupPage.errorMessage).toHaveText('* Enter a valid email address.')
 
-    });
+        });
 
-    it('Test with invalid email field', async () => {
+        it('Test this email is in use', async () => {
 
-        await SignupPage.signup(randomName, 'test@test', randomPassword);
-        await expect(SignupPage.errorMessage).toHaveText('* Enter a valid email address.')
+            await SignupPage.signup(randomName, email, randomPassword);
+            await HomePage.signOutLink.waitForDisplayed();
+            await HomePage.signOutLink.click();
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+            await (await SignupPage.field("id_name")).addValue(randomName); 
+            await (await SignupPage.field("id_email")).addValue(email);
+            await expect(SignupPage.errorMessage).toHaveText('This email is in use.');
 
-    });
+        });
 
-    it('Test this email is in use', async () => {
+        it('Test this email already exists', async () => {
 
-        await SignupPage.signup(randomName, email, randomPassword);
-        await SignupPage.signoutBtn.click();
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-        await (await SignupPage.field("id_name")).addValue(randomName); 
-        await (await SignupPage.field("id_email")).addValue(email);
-        await expect(SignupPage.errorMessage).toHaveText('This email is in use.');
+            await SignupPage.signup(randomName, email2, randomPassword);
+            await HomePage.signOutLink.waitForDisplayed();
+            await HomePage.signOutLink.click();
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+            await SignupPage.signup(randomName, email2, randomPassword);
+            await expect(SignupPage.errorMessage).toHaveText('* User with this Email Address already exists.');
 
-    });
-
-    it('Test this email already exists', async () => {
-
-        await SignupPage.signup(randomName, email, randomPassword);
-        await SignupPage.signoutBtn.click();
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-        await SignupPage.signup(randomName, email, randomPassword);
-        await expect(SignupPage.errorMessage).toHaveText('* User with this Email Address already exists.');
+        });
 
     });
 
-});
+    describe('Tests for Password field', () => {
 
-describe('Tests for Password field', () => {
+        beforeEach(async () => {
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+        });
 
-    beforeEach(async () => {
-        await HomePage.open();
-        await HomePage.signupBtn.click();
+        afterEach(async ()=>{
+            await browser.deleteAllCookies()
+        })
+
+        it('Test with blank password field', async () => {
+
+            //await expect(SignupPage.passwordField).toHaveAttribute('required');
+            await expect(SignupPage.field("id_password")).toHaveAttribute('required');
+        });
     });
 
-    afterEach(async ()=>{
-        await browser.deleteAllCookies()
-    })
+    describe('sign up happy path', () => {
 
-    it('Test with blank password field', async () => {
+        const randomName = Math.random().toString(36).substring(7);
+        const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
+        const randomPassword = Math.random().toString(36).substring(7);
 
-        //await expect(SignupPage.passwordField).toHaveAttribute('required');
-        await expect(SignupPage.field("id_password")).toHaveAttribute('required');
-    });
-});
+        beforeEach(async () => {
+            await HomePage.open();
+            await HomePage.signupBtn.click();
+        });
 
-describe('sign up happy path', () => {
+        afterEach(async ()=>{
+            await browser.deleteAllCookies()
+        })
 
-    const randomName = Math.random().toString(36).substring(7);
-    const randomEmail = Math.random().toString(36).substring(7) + '@test.com';
-    const randomPassword = Math.random().toString(36).substring(7);
+        it('should sign up correctly', async () => {
 
-    beforeEach(async () => {
-        await HomePage.open();
-        await HomePage.signupBtn.click();
-    });
+            await SignupPage.signup(randomName, randomEmail, randomPassword);
+            await expect(SignupPage.signoutBtn).toHaveText('Sign Out');
 
-    afterEach(async ()=>{
-        await browser.deleteAllCookies()
-    })
-
-    it('should sign up correctly', async () => {
-
-        await SignupPage.signup(randomName, randomEmail, randomPassword);
-        await expect(SignupPage.signoutBtn).toHaveText('Sign Out');
-
+        });
     });
 });
