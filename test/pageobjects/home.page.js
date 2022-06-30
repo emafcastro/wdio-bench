@@ -2,7 +2,7 @@ import Page from "./page";
 
 class HomePage extends Page {
     get signinBtn() {
-        return $('.nav-link=Sign in');
+        return $(".nav-link=Sign in");
     }
 
     get signupBtn() {
@@ -10,7 +10,7 @@ class HomePage extends Page {
     }
 
     get signOutLink() {
-        return $('.nav-link=Sign Out');
+        return $(".nav-link=Sign Out");
     }
 
     get newArticleLink() {
@@ -21,8 +21,25 @@ class HomePage extends Page {
         return $("/html/body/nav/div/ul/li[3]/a");
     }
 
+    get usernameLink(){
+        return $(".nav-link="+process.env.TEST_USERNAME);
+        //return $(`.nav-link=${process.env.TEST_USERNAME}`);
+    }
+
+    get navLinks() {
+        return $$(".nav-link");
+    }
+
     open() {
         return super.open("");
+    }
+
+    async getNavLinksText() {
+        let linkTextArr = [];
+        await this.navLinks.forEach(async (link) => {
+            linkTextArr.push(await link.getText());
+        });
+        return linkTextArr;
     }
 }
 

@@ -16,6 +16,10 @@ class ArticlesPage extends Page {
     get creationDateTxt() {
         return $(".container > .article-meta > .info > span");
     }
+
+    get deleteBtn() {
+        return $$("#delete-article")[0];
+    }
 }
 
 export default new ArticlesPage();

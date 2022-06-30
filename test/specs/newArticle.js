@@ -112,7 +112,10 @@ describe("New Article tests", () => {
             expect(NewArticlePage.tagSuggestion).not.toBeExisting();
         });
 
-        it("should allow it add only 120 characters in email field", async () => {
+        /**
+         * Test to check if more than 120 characters can be inserted on title field
+         */
+        it("should allow it add only 120 characters in title field", async () => {
             let chars = "abcdefghijklmnopqrstuvwxyz1234567890";
             let text = "";
             for (let ii = 0; ii < 120; ii++) {
